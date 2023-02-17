@@ -27,6 +27,7 @@ from shapely import affinity
 from descartes import PolygonPatch
 
 from torchvision.transforms.functional import to_tensor
+from torch.nn.functional import interpolate
 
 from nuscenes.nuscenes import NuScenes
 from nuscenes.utils.geometry_utils import (
@@ -1247,7 +1248,7 @@ def generate_semantic_maps():
         )
 
         # Scale lidar mask up to BEV mask resolution
-        lidar_ray_mask = F.interpolate(
+        lidar_ray_mask = interpolate(
             torch.tensor(lidar_ray_mask).unsqueeze(0).unsqueeze(0),
             size=[int(bev_max_x * 2), int(bev_max_z)],
             mode="bilinear"
